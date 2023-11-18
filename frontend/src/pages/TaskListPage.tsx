@@ -7,13 +7,16 @@ function App() {
   function addTask(task: Task) {
     setTasks((prev) => [...prev, task]);
   }
+  function deleteTask(id: string) {
+    setTasks((prev) => [...prev.filter((e) => e.id != id)]);
+  }
   return (
     <>
       <div className="text-center">Task Manager</div>
       <TaskForm handleSubmit={addTask} />
       <div className="flex flex-wrap gap-2">
         {tasks.map((e) => (
-          <TaskItemComponent {...e} />
+          <TaskItemComponent task={e} handleDelete={deleteTask} />
         ))}
       </div>
     </>
