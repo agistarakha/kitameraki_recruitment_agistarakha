@@ -1,15 +1,8 @@
 import express from "express";
 export const router = express.Router();
+import { getAllTasks } from "../controllers/taskController";
 
-router.get("/", (req, res) => {
-  res.json([
-    {
-      id: 1,
-      title: "Title",
-      descriptions: "Desc",
-    },
-  ]);
-});
+router.get("/", getAllTasks);
 
 router.post("/", (req, res) => {
   const data = req.body;
