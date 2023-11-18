@@ -8,7 +8,17 @@ function App() {
     setTasks((prev) => [...prev, task]);
   }
   function deleteTask(id: string) {
-    setTasks((prev) => [...prev.filter((e) => e.id != id)]);
+    setTasks((prev) => prev.filter((e) => e.id != id));
+  }
+  function updateTask(updatedTask: Task) {
+    setTasks((prev) =>
+      prev.map((e) => {
+        if (e.id == updatedTask.id) {
+          return updatedTask;
+        }
+        return e;
+      })
+    );
   }
   return (
     <>
@@ -16,7 +26,12 @@ function App() {
       <TaskForm handleSubmit={addTask} />
       <div className="flex flex-wrap gap-2">
         {tasks.map((e) => (
-          <TaskItemComponent task={e} handleDelete={deleteTask} />
+          <TaskItemComponent
+            key={e.id}
+            task={e}
+            handleDelete={deleteTask}
+            handleUpdate={updateTask}
+          />
         ))}
       </div>
     </>
