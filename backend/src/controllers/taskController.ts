@@ -11,6 +11,8 @@ type Task = z.infer<typeof taskSchema> & {
   id: number;
 };
 
+const fixedPageSize = 2;
+
 const dataFilePath = path.join(__dirname, "../../data/tasks.json");
 
 const readTasksFromFile = (): Task[] => {
@@ -32,8 +34,29 @@ const writeTasksToFile = (task: Task[]) => {
 };
 
 export const getAllTasks = (req: Request, res: Response) => {
-  const tasks = readTasksFromFile();
-  res.json(tasks);
+  try {
+    const pageQueryParam = req.query.page;
+    const page = pageQueryParam ? parseInt(pageQueryParam as string, 10) : 1;
+
+    if (isNaN(page) || page < 1) {
+      throw new Error("Invalid page parameter");
+    }
+
+    const tasks = readTasksFromFile();
+    const startIndex = (page - 1) * fixedPageSize;
+    const endIndex = page * fixedPageSize;
+
+    const paginatedTasks = tasks.slice(startIndex, endIndex);
+
+    res.json({
+      tasks: paginatedTasks,
+      totalPages: Math.ceil(tasks.length / fixedPageSize),
+      currentPage: page,
+    });
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(400).json({ error: "Invalid pagination parameters" });
+  }
 };
 
 export const addTask = (req: Request, res: Response) => {
