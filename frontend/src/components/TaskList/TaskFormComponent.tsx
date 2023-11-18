@@ -12,7 +12,6 @@ export default function TaskForm({ handleSubmit }: TaskFormProps) {
 
   return (
     <form
-      className="px-2"
       onSubmit={(e) => {
         e.preventDefault();
         const newTask: Task = {
