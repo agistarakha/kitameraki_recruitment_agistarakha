@@ -1,10 +1,13 @@
 import express from "express";
+import { taskRoutes } from "./routes";
 
 const app = express();
-const port = 3000;
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "OK" });
-});
-app.listen(port, () => {
-  console.log("App listen to: http://localhost:" + port);
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+
+app.use("/api/tasks", taskRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
