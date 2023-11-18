@@ -1,4 +1,4 @@
-import TaskForm from "../components/TaskList/TaskForm";
+import TaskForm from "../components/TaskList/TaskFormComponent";
 import { useState } from "react";
 import { Task } from "../types/Task";
 function App() {
