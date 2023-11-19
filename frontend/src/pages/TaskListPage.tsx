@@ -56,16 +56,31 @@ function App() {
       console.error("Error deleting task:", error);
     }
   };
-  function updateTask(updatedTask: Task) {
-    setTasks((prev) =>
-      prev.map((e) => {
-        if (e.id == updatedTask.id) {
-          return updatedTask;
+  const updateTask = async (updatedTask: Task) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/tasks/${updatedTask.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: updatedTask.title,
+            description: updatedTask.description,
+          }),
         }
-        return e;
-      })
-    );
-  }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update task");
+      }
+
+      await fetchTasks();
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+  };
   return (
     <>
       <div className="text-center">Task Manager</div>
