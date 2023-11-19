@@ -1,8 +1,10 @@
 import { Task, TaskFunction } from "../../types";
 import TaskItemComponent from "./TaskItemComponent";
-import { useState, useEffect } from "react";
 
-type TaskListComponentProps = Omit<TaskFunction, "handleSubmit"> & {
+type TaskListComponentProps = Pick<
+  TaskFunction,
+  "handleDelete" | "handleUpdate"
+> & {
   tasks: Task[];
 };
 export default function TaskListComponent({
@@ -12,7 +14,7 @@ export default function TaskListComponent({
 }: TaskListComponentProps) {
   return (
     <>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col gap-2">
         {tasks.map((e) => (
           <TaskItemComponent
             key={e.id}

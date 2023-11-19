@@ -3,7 +3,10 @@ import { Task, TaskFunction } from "../../types";
 import { TextField } from "@fluentui/react/lib/TextField";
 import { DefaultButton } from "@fluentui/react/lib/Button";
 
-type TaskItemComponentProps = Omit<TaskFunction, "handleSubmit"> & {
+type TaskItemComponentProps = Pick<
+  TaskFunction,
+  "handleDelete" | "handleUpdate"
+> & {
   task: Task;
 };
 export default function TaskItemComponent({
@@ -27,6 +30,7 @@ export default function TaskItemComponent({
     >
       {!isEdit ? (
         <div>
+          <div>{task.id}</div>
           <div>{title}</div>
           <div className="text-xs font-light h-12 break-words overflow-y-hidden  hover:overflow-y-auto">
             {description}

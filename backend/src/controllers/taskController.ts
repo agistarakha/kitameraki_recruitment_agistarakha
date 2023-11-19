@@ -11,7 +11,7 @@ type Task = z.infer<typeof taskSchema> & {
   id: number;
 };
 
-const fixedPageSize = 2;
+const fixedPageSize = 5;
 
 const dataFilePath = path.join(__dirname, "../../data/tasks.json");
 
@@ -64,7 +64,7 @@ export const addTask = (req: Request, res: Response) => {
     const { title, description } = taskSchema.parse(req.body);
     const tasks = readTasksFromFile();
     const newTask: Task = {
-      id: tasks[tasks.length - 1].id + 1,
+      id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
       title,
       description,
     };

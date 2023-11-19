@@ -1,23 +1,59 @@
 import TaskForm from "../components/TaskList/TaskFormComponent";
 import TaskListComponent from "../components/TaskList/TaskListComponent";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Task, TaskApiRes, TaskContent } from "../types";
 import { taskApiResSchema } from "../schemas";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  useEffect(() => {
-    fetchTasks();
-  }, []);
 
-  const fetchTasks = async () => {
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLastPage, setIsLastPage] = useState(false);
+
+  useEffect(() => {
+    if (!isLastPage) {
+      setIsLoading(true);
+      fetchTasks(page);
+      setIsLoading(false);
+      window.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [page]);
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop <
+        document.documentElement.offsetHeight - 2 ||
+      isLoading
+    ) {
+      return;
+    }
+    setPage((prev) => prev + 1);
+  };
+  const fetchTasks = async (currentPage?: number) => {
     try {
-      const response = await fetch("http://localhost:3000/api/tasks");
+      const response = await fetch(
+        `http://localhost:3000/api/tasks?page=${currentPage || ""}`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch tasks");
       }
       const data: TaskApiRes = taskApiResSchema.parse(await response.json());
-      setTasks(data.tasks);
+      if (currentPage) {
+        if (currentPage >= data.totalPages) {
+          setIsLastPage(true);
+        }
+        setTasks((prev) => [...prev, ...data.tasks]);
+      } else {
+        setTasks(data.tasks);
+        setIsLastPage(false);
+        if (data.totalPages > 1) {
+          setPage(2);
+        }
+      }
     } catch (error) {
       console.error("Error fetching tasks", error);
     }
@@ -25,7 +61,7 @@ function App() {
   const addTask = async (newTask: TaskContent) => {
     try {
       const response = await fetch("http://localhost:3000/api/tasks", {
-        method: "POSt",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -54,6 +90,7 @@ function App() {
       await fetchTasks();
     } catch (error) {
       console.error("Error deleting task:", error);
+    } finally {
     }
   };
   const updateTask = async (updatedTask: Task) => {
@@ -75,10 +112,14 @@ function App() {
       if (!response.ok) {
         throw new Error("Failed to update task");
       }
-
-      await fetchTasks();
     } catch (error) {
       console.error("Error updating task:", error);
+    } finally {
+      setTasks((prev) =>
+        prev.map((e) =>
+          e.id === updatedTask.id ? { ...e, ...updatedTask } : e
+        )
+      );
     }
   };
   return (
