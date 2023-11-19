@@ -88,3 +88,19 @@ export const deleteTask = (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const updateTask = (req: Request, res: Response) => {
+  try {
+    const taskId = parseInt(req.params.id, 10);
+    const updatedTaskData = req.body;
+    const tasks = readTasksFromFile();
+    const updatedTasks = tasks.map((task) =>
+      task.id === taskId ? { ...task, ...updatedTaskData } : task
+    );
+    writeTasksToFile(updatedTasks);
+    res.json({ success: true, updatedTask: updatedTaskData });
+  } catch (error) {
+    console.error("Error updating task:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
