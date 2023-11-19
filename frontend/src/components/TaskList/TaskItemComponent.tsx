@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Task } from "../../types/Task";
+import { Task } from "../../types";
 import { TextField } from "@fluentui/react/lib/TextField";
 import { DefaultButton } from "@fluentui/react/lib/Button";
 
@@ -15,16 +15,16 @@ export default function TaskItemComponent({
   handleUpdate,
 }: TaskItemComponentProps) {
   const [title, setTitle] = useState(task.title);
-  const [descriptions, setDescriptions] = useState(task.descriptions);
+  const [description, setDescription] = useState(task.description);
   const [isEdit, setIsEdit] = useState(false);
   const prevTitle = useRef("");
-  const prevDescriptions = useRef<string | undefined>("");
+  const prevDescription = useRef<string | undefined>("");
   return (
     <form
       className="p-2 shadow-md w-32 bg-slate-200"
       onSubmit={(e) => {
         e.preventDefault();
-        handleUpdate({ id: task.id, title, descriptions });
+        handleUpdate({ id: task.id, title, description });
         setIsEdit(false);
       }}
     >
@@ -32,7 +32,7 @@ export default function TaskItemComponent({
         <div>
           <div>{title}</div>
           <div className="text-xs font-light h-12 break-words overflow-y-hidden  hover:overflow-y-auto">
-            {descriptions}
+            {description}
           </div>
         </div>
       ) : (
@@ -45,11 +45,11 @@ export default function TaskItemComponent({
             required
           />
           <TextField
-            value={descriptions || ""}
-            label="Descriptions"
+            value={description || ""}
+            label="Description"
             multiline
             rows={3}
-            onChange={(event, newValue) => setDescriptions(newValue || "")}
+            onChange={(event, newValue) => setDescription(newValue || "")}
           />
         </div>
       )}
@@ -62,8 +62,8 @@ export default function TaskItemComponent({
               onClick={() => {
                 setIsEdit(false);
                 if (title != prevTitle.current) setTitle(prevTitle.current);
-                if (descriptions != prevDescriptions.current)
-                  setDescriptions(prevDescriptions.current);
+                if (description != prevDescription.current)
+                  setDescription(prevDescription.current);
               }}
             >
               Cancel
@@ -80,7 +80,7 @@ export default function TaskItemComponent({
             onClick={() => {
               setIsEdit(true);
               prevTitle.current = title;
-              prevDescriptions.current = descriptions;
+              prevDescription.current = description;
             }}
           >
             Edit

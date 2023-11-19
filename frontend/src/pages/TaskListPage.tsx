@@ -1,13 +1,8 @@
 import TaskForm from "../components/TaskList/TaskFormComponent";
 import TaskItemComponent from "../components/TaskList/TaskItemComponent";
 import { useEffect, useState } from "react";
-import { Task } from "../types/Task";
-
-type TaskApiResponse = {
-  tasks: Task[];
-  totalPages: number;
-  currentPage: number;
-};
+import { Task, TaskApiRes } from "../types";
+import { taskApiResSchema } from "../schemas";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -21,7 +16,7 @@ function App() {
       if (!response.ok) {
         throw new Error("Failed to fetch tasks");
       }
-      const data: TaskApiResponse = await response.json();
+      const data: TaskApiRes = taskApiResSchema.parse(await response.json());
       setTasks(data.tasks);
     } catch (error) {
       console.error("Error fetching tasks");

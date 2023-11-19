@@ -1,6 +1,6 @@
 import { TextField } from "@fluentui/react/lib/TextField";
 import { DefaultButton } from "@fluentui/react/lib/Button";
-import { Task } from "../../types/Task";
+import { Task } from "../../types";
 import { useState } from "react";
 
 interface TaskFormProps {
