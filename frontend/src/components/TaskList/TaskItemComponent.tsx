@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Task, TaskFunction } from "../../types";
 import { TextField } from "@fluentui/react/lib/TextField";
 import { DefaultButton } from "@fluentui/react/lib/Button";
+import { Text } from "@fluentui/react/lib/Text";
 
 type TaskItemComponentProps = Pick<
   TaskFunction,
@@ -21,7 +22,7 @@ export default function TaskItemComponent({
   const prevDescription = useRef<string | undefined>("");
   return (
     <form
-      className="p-2 shadow-md w-32 bg-slate-200"
+      className="p-2 border border-black shadow shadow-black"
       onSubmit={(e) => {
         e.preventDefault();
         handleUpdate({ id: task.id, title, description });
@@ -30,11 +31,10 @@ export default function TaskItemComponent({
     >
       {!isEdit ? (
         <div>
-          <div>{task.id}</div>
-          <div>{title}</div>
-          <div className="text-xs font-light h-12 break-words overflow-y-hidden  hover:overflow-y-auto">
+          <Text className="block font-semibold text-lg">{title}</Text>
+          <Text className="block  h-12 break-words overflow-y-hidden  hover:overflow-y-auto">
             {description}
-          </div>
+          </Text>
         </div>
       ) : (
         <div>
@@ -58,7 +58,8 @@ export default function TaskItemComponent({
         {isEdit ? (
           <div>
             <DefaultButton text="Save" type="submit" />
-            <button
+            <DefaultButton
+              text="Cancel"
               type="button"
               onClick={() => {
                 setIsEdit(false);
@@ -66,29 +67,23 @@ export default function TaskItemComponent({
                 if (description != prevDescription.current)
                   setDescription(prevDescription.current);
               }}
-            >
-              Cancel
-            </button>
+            />
           </div>
         ) : (
-          //   <DefaultButton
-          //     type="button"
-          //     text="Edit"
-          //     onClick={() => setIsEdit(true)}
-          //   />
-          <button
+          <DefaultButton
             type="button"
+            text="Edit"
             onClick={() => {
               setIsEdit(true);
               prevTitle.current = title;
               prevDescription.current = description;
             }}
-          >
-            Edit
-          </button>
+          />
+        )}
+        {isEdit || (
+          <DefaultButton text="Delete" onClick={() => handleDelete(task.id)} />
         )}
       </div>
-      <DefaultButton text="Delete" onClick={() => handleDelete(task.id)} />
     </form>
   );
 }

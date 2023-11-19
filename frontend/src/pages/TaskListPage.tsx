@@ -3,6 +3,7 @@ import TaskListComponent from "../components/TaskList/TaskListComponent";
 import { useState, useEffect } from "react";
 import { Task, TaskApiRes, TaskContent } from "../types";
 import { taskApiResSchema } from "../schemas";
+import { Text } from "@fluentui/react/lib/Text";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -123,15 +124,19 @@ function App() {
     }
   };
   return (
-    <>
-      <div className="text-center">Task Manager</div>
+    <div className="lg:px-48 px-4 py-2">
+      <Text className="text-xl block text-center font-bold">Task Manager</Text>
+      <Text className="text-lg block font-bold">New Task</Text>
       <TaskForm handleSubmit={addTask} />
+      <div className="py-2"></div>
+
+      <Text className="text-lg font-bold">My Tasks</Text>
       <TaskListComponent
         handleDelete={deleteTask}
         handleUpdate={updateTask}
         tasks={tasks}
       />
-    </>
+    </div>
   );
 }
 

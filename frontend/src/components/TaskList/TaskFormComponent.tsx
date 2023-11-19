@@ -22,7 +22,6 @@ export default function TaskForm({ handleSubmit }: TaskFormProps) {
     >
       <TextField
         label="Title"
-        className="w-8/12"
         value={title}
         // onChange={onChangeTitle}
         onChange={(event, newValue) => setTitle(newValue || "")}
@@ -32,7 +31,6 @@ export default function TaskForm({ handleSubmit }: TaskFormProps) {
         label="Description"
         multiline
         rows={3}
-        className="w-8/12"
         onChange={(event, newValue) => setDescription(newValue || "")}
       />
       <DefaultButton text="Create Task" type="submit" />
