@@ -1,4 +1,4 @@
-import { array, z } from "zod";
+import { z } from "zod";
 
 export const taskSchema = z.object({
   id: z.number().int().min(1),
