@@ -64,7 +64,7 @@ export const addTask = (req: Request, res: Response) => {
     const { title, description } = taskSchema.parse(req.body);
     const tasks = readTasksFromFile();
     const newTask: Task = {
-      id: tasks.length + 1,
+      id: tasks[tasks.length - 1].id + 1,
       title,
       description,
     };
@@ -74,5 +74,17 @@ export const addTask = (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error adding task", error);
     res.status(400).json({ error: "Invalid data provided" });
+  }
+};
+export const deleteTask = (req: Request, res: Response) => {
+  try {
+    const taskId = parseInt(req.params.id, 10);
+    const tasks = readTasksFromFile();
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    writeTasksToFile(updatedTasks);
+    res.status(204).end();
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
