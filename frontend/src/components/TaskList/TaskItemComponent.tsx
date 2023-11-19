@@ -5,7 +5,7 @@ import { DefaultButton } from "@fluentui/react/lib/Button";
 
 type TaskItemComponentProps = {
   task: Task;
-  handleDelete: (id: string) => void;
+  handleDelete: (id: number) => void;
   handleUpdate: (updatedTask: Task) => void;
 };
 
@@ -18,7 +18,7 @@ export default function TaskItemComponent({
   const [descriptions, setDescriptions] = useState(task.descriptions);
   const [isEdit, setIsEdit] = useState(false);
   const prevTitle = useRef("");
-  const prevDescriptions = useRef<string | null>("");
+  const prevDescriptions = useRef<string | undefined>("");
   return (
     <form
       className="p-2 shadow-md w-32 bg-slate-200"

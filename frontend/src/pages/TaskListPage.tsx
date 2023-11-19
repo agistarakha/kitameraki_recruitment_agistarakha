@@ -1,13 +1,36 @@
 import TaskForm from "../components/TaskList/TaskFormComponent";
 import TaskItemComponent from "../components/TaskList/TaskItemComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Task } from "../types/Task";
+
+type TaskApiResponse = {
+  tasks: Task[];
+  totalPages: number;
+  currentPage: number;
+};
+
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/tasks");
+      if (!response.ok) {
+        throw new Error("Failed to fetch tasks");
+      }
+      const data: TaskApiResponse = await response.json();
+      setTasks(data.tasks);
+    } catch (error) {
+      console.error("Error fetching tasks");
+    }
+  };
   function addTask(task: Task) {
     setTasks((prev) => [...prev, task]);
   }
-  function deleteTask(id: string) {
+  function deleteTask(id: number) {
     setTasks((prev) => prev.filter((e) => e.id != id));
   }
   function updateTask(updatedTask: Task) {
