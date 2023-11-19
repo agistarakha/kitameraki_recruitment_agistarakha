@@ -41,9 +41,21 @@ function App() {
     }
   };
 
-  function deleteTask(id: number) {
-    setTasks((prev) => prev.filter((e) => e.id != id));
-  }
+  const deleteTask = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete task");
+      }
+
+      await fetchTasks();
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
   function updateTask(updatedTask: Task) {
     setTasks((prev) =>
       prev.map((e) => {
