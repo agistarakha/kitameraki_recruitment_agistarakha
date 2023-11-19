@@ -1,7 +1,7 @@
 import TaskForm from "../components/TaskList/TaskFormComponent";
 import TaskItemComponent from "../components/TaskList/TaskItemComponent";
 import { useEffect, useState } from "react";
-import { Task, TaskApiRes } from "../types";
+import { Task, TaskApiRes, TaskContent } from "../types";
 import { taskApiResSchema } from "../schemas";
 
 function App() {
@@ -19,12 +19,28 @@ function App() {
       const data: TaskApiRes = taskApiResSchema.parse(await response.json());
       setTasks(data.tasks);
     } catch (error) {
-      console.error("Error fetching tasks");
+      console.error("Error fetching tasks", error);
     }
   };
-  function addTask(task: Task) {
-    setTasks((prev) => [...prev, task]);
-  }
+  const addTask = async (newTask: TaskContent) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/tasks", {
+        method: "POSt",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTask),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add task");
+      }
+
+      await fetchTasks();
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
+  };
+
   function deleteTask(id: number) {
     setTasks((prev) => prev.filter((e) => e.id != id));
   }

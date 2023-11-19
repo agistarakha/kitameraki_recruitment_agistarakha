@@ -1,23 +1,22 @@
 import { TextField } from "@fluentui/react/lib/TextField";
 import { DefaultButton } from "@fluentui/react/lib/Button";
-import { Task } from "../../types";
+import { TaskContent } from "../../types";
 import { useState } from "react";
 
 interface TaskFormProps {
-  handleSubmit: (task: Task) => void;
+  handleSubmit: (newTask: TaskContent) => void;
 }
 export default function TaskForm({ handleSubmit }: TaskFormProps) {
   const [title, setTitle] = useState("");
-  const [descriptions, setDescriptions] = useState("");
+  const [description, setDescription] = useState("");
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        const newTask: Task = {
-          id: crypto.randomUUID(),
+        const newTask: TaskContent = {
           title,
-          descriptions,
+          description,
         };
         handleSubmit(newTask);
       }}
@@ -35,7 +34,7 @@ export default function TaskForm({ handleSubmit }: TaskFormProps) {
         multiline
         rows={3}
         className="w-8/12"
-        onChange={(event, newValue) => setDescriptions(newValue || "")}
+        onChange={(event, newValue) => setDescription(newValue || "")}
       />
       <DefaultButton text="Create Task" type="submit" />
     </form>
