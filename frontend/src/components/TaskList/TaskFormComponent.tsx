@@ -1,11 +1,10 @@
 import { TextField } from "@fluentui/react/lib/TextField";
 import { DefaultButton } from "@fluentui/react/lib/Button";
-import { TaskContent } from "../../types";
+import { TaskContent, TaskFunction } from "../../types";
 import { useState } from "react";
 
-interface TaskFormProps {
-  handleSubmit: (newTask: TaskContent) => void;
-}
+type TaskFormProps = Pick<TaskFunction, "handleSubmit">;
+
 export default function TaskForm({ handleSubmit }: TaskFormProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");

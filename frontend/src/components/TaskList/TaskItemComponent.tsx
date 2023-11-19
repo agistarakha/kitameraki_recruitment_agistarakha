@@ -1,14 +1,11 @@
 import { useRef, useState } from "react";
-import { Task } from "../../types";
+import { Task, TaskFunction } from "../../types";
 import { TextField } from "@fluentui/react/lib/TextField";
 import { DefaultButton } from "@fluentui/react/lib/Button";
 
-type TaskItemComponentProps = {
+type TaskItemComponentProps = Omit<TaskFunction, "handleSubmit"> & {
   task: Task;
-  handleDelete: (id: number) => void;
-  handleUpdate: (updatedTask: Task) => void;
 };
-
 export default function TaskItemComponent({
   task,
   handleDelete,

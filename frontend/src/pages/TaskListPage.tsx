@@ -1,5 +1,5 @@
 import TaskForm from "../components/TaskList/TaskFormComponent";
-import TaskItemComponent from "../components/TaskList/TaskItemComponent";
+import TaskListComponent from "../components/TaskList/TaskListComponent";
 import { useEffect, useState } from "react";
 import { Task, TaskApiRes, TaskContent } from "../types";
 import { taskApiResSchema } from "../schemas";
@@ -85,16 +85,11 @@ function App() {
     <>
       <div className="text-center">Task Manager</div>
       <TaskForm handleSubmit={addTask} />
-      <div className="flex flex-wrap gap-2">
-        {tasks.map((e) => (
-          <TaskItemComponent
-            key={e.id}
-            task={e}
-            handleDelete={deleteTask}
-            handleUpdate={updateTask}
-          />
-        ))}
-      </div>
+      <TaskListComponent
+        handleDelete={deleteTask}
+        handleUpdate={updateTask}
+        tasks={tasks}
+      />
     </>
   );
 }
