@@ -64,11 +64,11 @@ export const addTask = (req: Request, res: Response) => {
     const { title, description } = taskSchema.parse(req.body);
     const tasks = readTasksFromFile();
     const newTask: Task = {
-      id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
+      id: tasks.length > 0 ? tasks[0].id + 1 : 1,
       title,
       description,
     };
-    tasks.push(newTask);
+    tasks.unshift(newTask);
     writeTasksToFile(tasks);
     res.status(201).json(newTask);
   } catch (error) {

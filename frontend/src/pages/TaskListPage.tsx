@@ -14,15 +14,20 @@ function App() {
 
   useEffect(() => {
     if (!isLastPage) {
-      setIsLoading(true);
       fetchTasks(page);
-      setIsLoading(false);
       window.addEventListener("scroll", handleScroll);
     }
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [page]);
+
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, [page]);
 
   const handleScroll = () => {
     if (
@@ -36,6 +41,7 @@ function App() {
   };
   const fetchTasks = async (currentPage?: number) => {
     try {
+      setIsLoading(true);
       const response = await fetch(
         `http://localhost:3000/api/tasks?page=${currentPage || ""}`
       );
@@ -43,6 +49,7 @@ function App() {
         throw new Error("Failed to fetch tasks");
       }
       const data: TaskApiRes = taskApiResSchema.parse(await response.json());
+      setIsLoading(false);
       if (currentPage) {
         if (currentPage >= data.totalPages) {
           setIsLastPage(true);
@@ -52,11 +59,15 @@ function App() {
         setTasks(data.tasks);
         setIsLastPage(false);
         if (data.totalPages > 1) {
+          if (page === 2) {
+            await fetchTasks(2);
+          }
           setPage(2);
         }
       }
     } catch (error) {
       console.error("Error fetching tasks", error);
+    } finally {
     }
   };
   const addTask = async (newTask: TaskContent) => {
@@ -88,6 +99,7 @@ function App() {
         throw new Error("Failed to delete task");
       }
 
+      window.scrollTo(0, 0);
       await fetchTasks();
     } catch (error) {
       console.error("Error deleting task:", error);
