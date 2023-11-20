@@ -40,6 +40,7 @@ function App() {
     setPage((prev) => prev + 1);
   };
   const fetchTasks = async (currentPage?: number) => {
+    if (isLoading) return;
     try {
       setIsLoading(true);
       const response = await fetch(
@@ -71,7 +72,9 @@ function App() {
     }
   };
   const addTask = async (newTask: TaskContent) => {
+    if (isLoading) return;
     try {
+      setIsLoading(true);
       const response = await fetch("http://localhost:3000/api/tasks", {
         method: "POST",
         headers: {
@@ -90,7 +93,9 @@ function App() {
   };
 
   const deleteTask = async (id: number) => {
+    if (isLoading) return;
     try {
+      setIsLoading(true);
       const response = await fetch(`http://localhost:3000/api/tasks/${id}`, {
         method: "DELETE",
       });
@@ -99,7 +104,7 @@ function App() {
         throw new Error("Failed to delete task");
       }
 
-      window.scrollTo(0, 0);
+      // window.scrollTo(0, 0);
       await fetchTasks();
     } catch (error) {
       console.error("Error deleting task:", error);
