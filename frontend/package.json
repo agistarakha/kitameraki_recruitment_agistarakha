@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@fluentui/react": "^8.112.9",
+    "@types/react-beautiful-dnd": "^13.1.7",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.19.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
