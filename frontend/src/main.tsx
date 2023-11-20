@@ -3,7 +3,9 @@ import TaskListPage from "./pages/TaskListPage.tsx";
 import TaskSettingsPage from "./pages/TaskSettingsPage.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { initializeIcons } from "@fluentui/react";
 
+initializeIcons();
 const router = createBrowserRouter([
   {
     path: "/",
