@@ -31,7 +31,6 @@ export default function TaskItemComponent({
     >
       {!isEdit ? (
         <div>
-          <div>{task.id}</div>
           <Text className="block font-semibold text-lg">{title}</Text>
           <Text className="block  h-12 break-words overflow-y-hidden  hover:overflow-y-auto">
             {description}
