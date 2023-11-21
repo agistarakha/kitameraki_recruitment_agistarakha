@@ -9,6 +9,7 @@ const taskSchema = z.object({
 });
 type Task = z.infer<typeof taskSchema> & {
   id: number;
+  optionalFields: object;
 };
 
 const fixedPageSize = 5;
@@ -67,6 +68,7 @@ export const addTask = (req: Request, res: Response) => {
       id: tasks.length > 0 ? tasks[0].id + 1 : 1,
       title,
       description,
+      optionalFields: {},
     };
     tasks.unshift(newTask);
     writeTasksToFile(tasks);

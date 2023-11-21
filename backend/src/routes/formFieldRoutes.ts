@@ -3,7 +3,7 @@ import {
   getFormFields,
   updateTasksFormat,
   writeFormFields,
-} from "../controllers/FormFieldController";
+} from "../controllers/formFieldController";
 export const router = express.Router();
 router.post("/", writeFormFields);
 

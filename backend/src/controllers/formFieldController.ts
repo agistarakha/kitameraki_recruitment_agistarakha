@@ -21,21 +21,16 @@ export const writeFormFields = (req: Request, res: Response) => {
     if (tasks.length > 0) {
       tasks = tasks.map((obj) => {
         // Remove properties that are not in the label array (excluding 'id', 'title', and 'description')
-        Object.keys(obj).forEach((prop) => {
-          if (
-            prop !== "id" &&
-            prop !== "title" &&
-            prop !== "description" &&
-            !labels.includes(prop)
-          ) {
-            delete obj[prop];
+        Object.keys(obj.optionalFields).forEach((prop) => {
+          if (!labels.includes(prop)) {
+            delete obj.optionalFields[prop];
           }
         });
 
         // Add missing properties with empty values
         labels.forEach((prop) => {
-          if (!obj.hasOwnProperty(prop)) {
-            obj[prop] = "";
+          if (!obj.optionalFields.hasOwnProperty(prop)) {
+            obj.optionalFields[prop] = "";
           }
         });
 

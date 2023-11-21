@@ -1,14 +1,10 @@
 [
   {
     "id": 1,
-    "title": "Title",
-    "description": "Desc",
-    "Text Field": ""
-  },
-  {
-    "id": 2,
-    "title": "Title",
-    "description": "Desc",
-    "Text Field": ""
+    "title": "task",
+    "description": "tas",
+    "optionalFields": {
+      "Text Field": ""
+    }
   }
 ]

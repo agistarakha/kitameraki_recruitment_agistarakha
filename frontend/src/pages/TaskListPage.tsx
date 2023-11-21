@@ -1,6 +1,6 @@
 import TaskForm from "../components/TaskList/TaskFormComponent";
 import TaskListComponent from "../components/TaskList/TaskListComponent";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Task, TaskApiRes, TaskContent } from "../types";
 import { taskApiResSchema } from "../schemas";
 import { Text } from "@fluentui/react/lib/Text";
@@ -12,7 +12,12 @@ function App() {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
+  const [optionalFields, setOptionalFields] = useState();
+  const optionalFieldType = useRef(null);
 
+  useEffect(() => {
+    fetchOptionalFieldType();
+  }, []);
   useEffect(() => {
     if (!isLastPage) {
       fetchTasks(page);
@@ -40,6 +45,20 @@ function App() {
     }
     setPage((prev) => prev + 1);
   };
+
+  const fetchOptionalFieldType = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/form-fields`);
+      const data = await res.json();
+      console.log(data.data);
+      optionalFieldType.current = data.data.map((e) => {
+        let obj = {};
+        obj[e.label] = e.type;
+        return obj;
+      });
+    } catch (error) {}
+  };
+
   const fetchTasks = async (currentPage?: number) => {
     if (isLoading) return;
     try {
@@ -50,8 +69,9 @@ function App() {
       if (!response.ok) {
         throw new Error("Failed to fetch tasks");
       }
-      const data: TaskApiRes = taskApiResSchema.parse(await response.json());
+      const data: TaskApiRes = await response.json();
       setIsLoading(false);
+      setOptionalFields(data.tasks.map((e) => e.optionalFields));
       if (currentPage) {
         if (currentPage >= data.totalPages) {
           setIsLastPage(true);
@@ -146,7 +166,11 @@ function App() {
       <Text className="text-xl block text-center font-bold">Task Manager</Text>
       <Text className="text-lg block font-bold">New Task</Text>
       <Link to={"/settings"}>Settings</Link>
-      <TaskForm handleSubmit={addTask} />
+      <TaskForm
+        handleSubmit={addTask}
+        optionalFields={optionalFields}
+        fieldType={optionalFieldType}
+      />
       <div className="py-2"></div>
 
       <Text className="text-lg font-bold">My Tasks</Text>
